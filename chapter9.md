@@ -4,7 +4,7 @@
 
 # MongoDB
 
-
+<br>
 
 ### mongodump와 mongorestore를 이용한 논리 백업 및 복구
 
@@ -17,7 +17,7 @@
 - 기본적으로  mongodump가 데이터를 덤프하는 동안 변경되는 데이터에 대해서는 백업이 일관된 상태를 유지하지 못한다.
 - **--oplog 옵션을 이용해서 mongodump 명령을 실행해야만 덤프가 실행 중인 동안 변경되는 데이터의 OpLog 이벤트를 같이 백업**할 수 있다.
 
-
+<br>
 
 ```
 mongodump --authenticationDatabase admin --oplog --out ./data/backup
@@ -25,7 +25,7 @@ mongodump --authenticationDatabase admin --oplog --out ./data/backup
 
 백업이 실행되면 mongodump는 **"--out" 파라미터에 지정한 디렉터리로 덤프한 BSON 도큐먼트를 기록**한다.
 
-
+<br>
 
 ```tex
 [irteam@dev-junghyuck2-ncl testMongoDB]$ docker exec -it mongoDB mongodump --authenticationDatabase admin --out ./data/backup
@@ -44,7 +44,7 @@ mongodump --authenticationDatabase admin --oplog --out ./data/backup
 > --oplog 옵션은 당연히 해당 MongoDB 서버의 OpLog가 활성화되있어야만 스냅샷을 백업할 수 있다.
 
 
-
+<br>
 
 
 #### 복구
@@ -57,7 +57,7 @@ mongodump --authenticationDatabase admin --oplog --out ./data/backup
 mongorestore --oplogReplay ./data/backup
 ```
 
-
+<br>
 
 > "--nsInclude"나 "--nsExclude" 옵션을 이용하여 mongodump로 백업된 데이터로부터 일부 데이터베이스나 컬렉션만 적재할 수 있다.
 >
@@ -65,7 +65,7 @@ mongorestore --oplogReplay ./data/backup
 >
 > "--nsParallelCollections", "--numInsertionWorkersPerCollection" 옵션으로 쓰레드 수를 조절하여 mongorestore 적재를 더 빠르게 실행할 수도 있다.
 
-
+<br>
 
 
 
@@ -75,7 +75,7 @@ MongoDB에서는 공식적으로 물리 백업이나 복구에 대한 도구는 
 
 mongodump와 mongorestore와 같은 논리적인 백업 및 복구 방식보다 **물리적으로 데이터를 백업하는 방법으로 빠르게 데이터를 백업하고 복구**할 수 있다.
 
-
+<br>
 
 #### 셧다운 상태의 백업
 
@@ -89,11 +89,11 @@ systemctl stop mongod.service
 cp -r /mongodb_data /data/backup
 ```
 
-
+<br>
 
 이렇게 세컨드리 멤버를 셧다운하는 경우 **MongoDB 레플리카 셋의 고가용성을 고려**해야 한다. 즉, 백업 위해 세컨드리 멤버가 셧다운 상태이므로 백업을 실행하는 동안 다른 멤버에서 장애가 발생했을 때 새로운 프라이머리 멤버가 선출되지 못하면서 서비스 할 수 없는 상태가 될 수 있는 것이다.
 
-
+<br>
 
 #### 복제 중지 상태의 백업
 
@@ -114,7 +114,7 @@ db.fsyncUnlock()
 
 위의 "셧다운 상태의 백업" 처럼 이 백업 방법도 **MongoDB 레플리카 셋의 고가용성을 고려**해야 한다.
 
-
+<br>
 
 #### Percona 온라인 백업
 
@@ -133,7 +133,7 @@ Percona에서는 이런 번거로움과 어려움을 해결하기 위해서 **Mo
 { "ok" : 1 }
 ```
 
-
+<br>
 
 
 
@@ -145,7 +145,7 @@ Percona에서는 이런 번거로움과 어려움을 해결하기 위해서 **Mo
 
 > recoverShardingState 옵션은 MongoDB 3.4 버전에서 사용가능, 3.6부터는 MongoDB 서버 시작시 레플리케이션 관련 옵션을 모두 제거하고 실행하면 recoverShardingState 옵션을 false 로 설정한 것과 동일한 효과를 얻을 수 있다.
 
-
+<br>
 
 ```
 // MongoDB 서버 시작 시 옵션 사용
@@ -160,7 +160,7 @@ setParameter:
 ...
 ```
 
-
+<br>
 
 #### PIT(Point-In-Time) 복구
 
@@ -170,14 +170,14 @@ setParameter:
 
 MongoDB에서 PIT 복구는 물리 또는 논리 풀 백업( MongoDB 덤프)에 최근의 OpLog 를 복구하는 방식으로 진행된다.
 
-
+<br>
 
 1. 물리 백업 복구
 2. 복구된 백업 시점부터 가장 최근 시점까지의  OpLog 백업(가용한 레플리카 셋 멤버로부터)
 3. 실수로 실행된 명령의  OpLog 이벤트의 타임스탬프 위치 확인
 4. 물리 백업 복구된 서버에 백업 시점부터 실수로 실행된 명령 직전까지의 OpLog 적용
 
-
+<br>
 
 **2번 OpLog 백업**은 레플리카 셋 중에서 **마지막 백업 시점부터의 OpLog를 가진 멤버가 있어야만 가능**하다.
 
@@ -189,11 +189,11 @@ MongoDB에서 PIT 복구는 물리 또는 논리 풀 백업( MongoDB 덤프)에 
 
 ![](https://media.oss.navercorp.com/user/11104/files/3ea035ac-ee43-11e8-91fb-4c29c250f63c)
 
-
+<br>
 
 **OpLog의 용량을 크게 해서 OpLog의 보관 주기를 길게 해두면 데이터 복구의 가능성이나 백업 주기를 길게 설정할 수 있다.**
 
-
+<br>
 
 **복구한 백업의  OpLog 시점 확인하기 위해 local 데이터 베이스의 oplog.rs 컬렉션의 가장 마지막 이벤트를 확인**한다.
 
@@ -204,7 +204,7 @@ OpLog의 이벤트별로 시점은 "ts" 필드에 저장된  Timestamp 값을 �
 {"ts" : Timestamp(1459850401, 11)}
 ```
 
-
+<br>
 
 이제 **가장 최근까지의 OpLog를 가진 다른 MongoDB 서버에서 OpLog를 덤프**하면 된다.
 
@@ -216,7 +216,7 @@ OpLog의 이벤트별로 시점은 "ts" 필드에 저장된  Timestamp 값을 �
 
 > OpLog는 Timestamp(1459850401, 11) 이전부터 덤프해도 무관하다.
 
-
+<br>
 
 이제 **덤프된 OpLog에서 실수로 데이터를 삭제한 이벤트의 시점을 찾아야 한다.**	
 
@@ -226,7 +226,7 @@ OpLog의 이벤트별로 시점은 "ts" 필드에 저장된  Timestamp 값을 �
 bsondump backup_oplog/local/oplog.rs.bson > oplog.json
 ```
 
-
+<br>
 
 OpLog는 사용자가 실행한 명령을 로깅하는 것이 아니라 변경된 데이터의 결과를 저장한다.
 
@@ -234,11 +234,11 @@ OpLog는 사용자가 실행한 명령을 로깅하는 것이 아니라 변경�
 
 이 점을 인지하고 **삭제된 시점을 JSON 파일로 변환된 OpLog 덤프 파일을 확인하고 그 시점의 Timestamp을 확인**한다.
 
-
+<br>
 
 **Timestamp(1459852199,1) --> 삭제된 시점의 Timestamp**
 
-
+<br>
 
 --oplogLimit 옵션을 이용해서 이 시점의 명령은 재생되지 않도록 한다. 
 
@@ -252,7 +252,7 @@ OpLog는 사용자가 실행한 명령을 로깅하는 것이 아니라 변경�
 > mongorestore --oplogReplay --oplogLimit 1459852199:1 backup_oplog
 ```
 
-
+<br>
 
 
 
