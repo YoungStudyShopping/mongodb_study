@@ -2,13 +2,13 @@
 
 
 
-# MongoDB
+# MongoDB - 백업 및 복구
 
 <br>
 
-### mongodump와 mongorestore를 이용한 논리 백업 및 복구
+## mongodump와 mongorestore를 이용한 논리 백업 및 복구
 
-#### 백업
+### 백업
 
 - **mongodump는 MongoDB에서 공식적으로 제공되는 유일한 백업 도구**이다.
 - mongodump는 MongoDB 서버의 데이터 파일을 물리적으로 복사하는 것이 아니라 **MongoDB 서버에 로그인한 다음 도큐먼트를 한건 한건씩 덤프해서 BSON 파일로 저장하는 방식**이다.
@@ -47,7 +47,7 @@ mongodump --authenticationDatabase admin --oplog --out ./data/backup
 <br>
 
 
-#### 복구
+### 복구
 
 - **mongorestore를 이용해서 위에서 만든 백업용 BSON 파일들을 읽어들여 데이터베이스를 복구할 수 있다.**
 - "--oplogReplay" 옵션은 덤프된 데이터 파일을 모두 적재한 후에 백업 디렉터리의 "oplog.bson" 파일을 적재하도록 해주는 옵션이다.
@@ -69,7 +69,7 @@ mongorestore --oplogReplay ./data/backup
 
 
 
-### 물리 백업 및 복구
+## 물리 백업 및 복구
 
 MongoDB에서는 공식적으로 물리 백업이나 복구에 대한 도구는 제공하지 않고 있다.
 
@@ -77,7 +77,7 @@ mongodump와 mongorestore와 같은 논리적인 백업 및 복구 방식보다 
 
 <br>
 
-#### 셧다운 상태의 백업
+### 셧다운 상태의 백업
 
 서비스에 투입되지 않은 세컨드리 멤버의 MongoDB 서버를 셧다운하고 데이터 파일을 복사하는 방법
 
@@ -95,7 +95,7 @@ cp -r /mongodb_data /data/backup
 
 <br>
 
-#### 복제 중지 상태의 백업
+### 복제 중지 상태의 백업
 
 db.fsyncLock() 명령을 이용해서 데이터 파일을 동기화하고, 글로벌 잠금을 거는 방법을 복제 동기화를 멈추는 방법으로 사용할 수 있다.
 
@@ -116,7 +116,7 @@ db.fsyncUnlock()
 
 <br>
 
-#### Percona 온라인 백업
+### Percona 온라인 백업
 
 위에 언급했던 "셧다운 상태의 백업", "복제 중지 상태의 백업" 방법은 고가용성에 영향을 미친다.
 
@@ -137,7 +137,7 @@ Percona에서는 이런 번거로움과 어려움을 해결하기 위해서 **Mo
 
 
 
-#### 물리 백업 복구
+### 물리 백업 복구
 
 - 복구도 간단하다. **복구하고자 하는 MongoDB 서버의 데이터 디렉터리에 백업된 데이터 파일을 그대로 복사**하기만 하면 된다.
 - 만약 **샤딩된 MongoDB 클러스터에서 백업된 데이터 파일을 이용해서 복구하는 경우**에는 백업된 데이터 파일을 사용해서 시작되는 MongoDB 서버가 아무런 응답도 없이 **무한정 대기 상태로 빠지는 경우**도 있다. **원본 MongoDB 서버가 소속된 클러스터의 구조를 확인하기 위해서 컨피그 서버로 접속하려고 하기 때문**
@@ -162,7 +162,7 @@ setParameter:
 
 <br>
 
-#### PIT(Point-In-Time) 복구
+### PIT(Point-In-Time) 복구
 
 사용자나 운영자의 실수로 데이터가 삭제되거나 하드웨어 폴트로 인해 데이터를 잃게 된 경우 복구를 하려면 백업된 데이터가 필수이다.
 
@@ -187,7 +187,7 @@ MongoDB에서 PIT 복구는 물리 또는 논리 풀 백업( MongoDB 덤프)에 
 >
 > 백업-1은 OpLog 동기화할 수 없고, 백업-2는 OpLog 동기화할 수 있다.
 
-![](https://media.oss.navercorp.com/user/11104/files/3ea035ac-ee43-11e8-91fb-4c29c250f63c)
+![test](https://media.oss.navercorp.com/user/11104/files/3ea035ac-ee43-11e8-91fb-4c29c250f63c)
 
 <br>
 
