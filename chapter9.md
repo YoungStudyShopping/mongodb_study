@@ -187,7 +187,7 @@ MongoDB에서 PIT 복구는 물리 또는 논리 풀 백업( MongoDB 덤프)에 
 >
 > 백업-1은 OpLog 동기화할 수 없고, 백업-2는 OpLog 동기화할 수 있다.
 
-![test](https://media.oss.navercorp.com/user/11104/files/3ea035ac-ee43-11e8-91fb-4c29c250f63c)
+![test](https://user-images.githubusercontent.com/10356931/48893825-93595880-ee84-11e8-8940-4d87295f6211.jpeg)
 
 <br>
 
